@@ -75,7 +75,7 @@ class ProcInfoIO:
 
     def size(self):
         return ProcInfoIO.SIZE
-
+        
     def naming(self):
         return ["readbytes", "writebytes", "canwritebytes", \
                         "readbytesrate", "writebytesrate", "canwritebytesrate"]
@@ -118,6 +118,6 @@ class ProcInfoStatus:
         for line in lines:
             items = line.split()
             if items[0].startswith("VmSize"):
-                met[0] = long(items[1]) * 1024
+                met[0] = long(items[1]) / 1024
             if items[0].startswith("VmRSS"):
-                met[1] = long(items[1]) * 1024
+                met[1] = long(items[1]) / 1024

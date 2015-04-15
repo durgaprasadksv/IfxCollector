@@ -37,6 +37,7 @@ class ProcInfo:
         if self.ppid in self.plist.procs:
             self.parent = self.plist.procs[self.ppid]
             self.parent.child.append(self.pid)
+            print 'create tree parent', self.parent
         else:
             self.parent = None
 
@@ -98,7 +99,8 @@ class ProcMon:
         for f in os.listdir(PATH.PROC):
             if len(f) > 0 and f.isdigit():
                 pid = int(f)
-                self.active.append(pid)
+                self.active.append(pid) #append all pids to active[] list
+                print 'in update procs = ', self.procs
                 if pid not in self.procs:
                     self.procs[pid] = ProcInfo(pid, self, self.modules)
                 self.procs[pid].update(int(time.time()))
@@ -111,6 +113,7 @@ class ProcMon:
 
     def monitor(self):
         self.update()
+        print 'in monitor after self.update() procs = ', self.procs
         for pid in self.active:
             pinfo = self.procs[pid]
             pinfo.prepare_tree()
