@@ -43,7 +43,7 @@ COLLECTORS = {}
 GENERATION = 0
 LOG = logging.getLogger('tcollector')
 ALIVE = True
-
+logfile = open('loggerout.log', 'w')
 
 def register_collector(collector):
     """Register a collector with the COLLECTORS global"""
@@ -444,7 +444,8 @@ class HTTPSenderThread(threading.Thread):
 	    map_resp['columns'] = [vals[0].split('.')[1]]
 	    resp.append(map_resp)
             print 'collect OUT in HTTPSenderThread :', resp
-	    requests.post(self.url, json.dumps(resp))
+	    #requests.post(self.url, json.dumps(resp))
+        logfile.write(json.dumps(resp))
             #LOG.debug('SENDING: %s', line)
         if not out:
             LOG.debug('send_data no data?')

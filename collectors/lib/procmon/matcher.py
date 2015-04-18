@@ -90,7 +90,8 @@ class SubtreeMatcher:
         except:
             sys.stderr.write("Parse rule configuration failed.")
             self.rules = []
-
+        print 'parsed rules ', self.rules
+        
     def initMetric(self, modules):
         self.results = []
         self.modules = modules

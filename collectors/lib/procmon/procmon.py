@@ -99,7 +99,7 @@ class ProcMon:
         for f in os.listdir(PATH.PROC):
             if len(f) > 0 and f.isdigit():
                 pid = int(f)
-                self.active.append(pid)
+                self.active.append(pid) #append all pids to active[] list
                 if pid not in self.procs:
                     self.procs[pid] = ProcInfo(pid, self, self.modules)
                 self.procs[pid].update(int(time.time()))
@@ -132,12 +132,13 @@ class ProcMon:
         while (1):
             self.startGroup()
             self.monitor()
+            print 'procs list = self.procs ', self.procs
             for matcher in self.matchers:
                 matcher.endGroup()
             self.report()
             for reporter in self.reporters:
                 reporter.endGroup()
-            time.sleep(interval)
+            time.sleep(50)
 
 if __name__ == "__main__":
     main()
