@@ -79,7 +79,7 @@ class SubtreeMatcher:
         self.results = []
         self.modules = None
         self.host = _host
-
+	self.proc_results = []
     def parseRules(self, rules):
         self.rules = []
         try:
@@ -117,18 +117,36 @@ class SubtreeMatcher:
                 if rule.is_aggregated():
                     self.aggTree(pinfo, self.results[i])
                 else:
-                    self.results[i].add(self.getMetric(pinfo))
+                    #self.results[i].add(self.getMetric(pinfo))
+		     pinfo.rule = rule #the rule that matched this pinfo
+		     self.proc_results.append(pinfo)
 
     def report(self, timestamp, reporter):
-        for i in range(0, len(self.rules)):
-            for j in range(0, len(self.modules)):
-                module = self.modules[j]
-                for k in range(0, module.size()):
-                    name = "process.%s" % (module.naming()[k])
-                    types = "proc=%s"%(self.rules[i].get_displayname())
-                    value = self.results[i].get(j, k)
-                    reporter.report(name, timestamp, value, types)
+	#-Xmx768m
+	metrics = []
+	for pinfo in self.proc_results:
+	    report = {}
+	    report['pid'] = pinfo.pid
+	    report['ppid'] = pinfo.ppid
+	    report ['cmd'] = pinfo.cmd
+	    report['proc'] = pinfo.rule.get_displayname()
+	    #yarn specific
+	    if 'Xmx' in pinfo.cmd:
+		Xmx = re.findall(r'Xmx\d+m', pinfo.cmd)[0]
+		report ['Xmx'] = re.findall(r'\d+',Xmx)[0]
 
+            if 'Yarn' in pinfo.cmd:
+		report['job_id'] = ''
+	    
+	    #we still need cpu_user, cpu_system, vmsize, vmrss, read/write readrate writerate 
+	    for i in xrange(0, len(pinfo.modules)):
+		module = pinfo.modules[i]
+		for k in xrange(0, module.size()):
+		    #for size of each module, get the metrics
+		    #value is in pinfo
+		    report[module.naming()[k]] = pinfo.met.get(i,k)
+	    metrics.append(report)
+	reporter.report_agg(time, metrics)
     def endGroup(self):
         pass
 

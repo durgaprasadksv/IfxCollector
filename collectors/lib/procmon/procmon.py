@@ -16,6 +16,7 @@ class ProcInfo:
         self.modules = modules
         self.met = MetricList(modules, 0)
         self.getIDs()
+	self.rule = None
 
     def getIDs(self):
         self.cmd = getCmdLine(self.pid)

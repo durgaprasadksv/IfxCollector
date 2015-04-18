@@ -4,12 +4,17 @@
 <configuration>
   <processes>
 <!-- List all the processes to monitor -->
-    <process>
-        <pid>0</pid>
-        <uid>0</uid>
-        <cmdline>.*org.apache.hadoop.hdfs.server.datanode.DataNode.*</cmdline>
-        <displayname>DataNode</displayname>
+<process>
+        <cmdline>.*org.apache.hadoop.hdfs.server.namenode.NameNode.*</cmdline>
+        <displayname>NameNode</displayname>
     </process>
+
+<process>
+        <cmdline>.*org.apache.hadoop.yarn.server.resourcemanager.ResourceManager.*</cmdline>
+        <displayname>ResourceManager</displayname>
+    </process>
+
+
   </processes>
   <hosts>
     <hostname>localhost</hostname>
