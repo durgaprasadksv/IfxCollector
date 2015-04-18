@@ -29,7 +29,6 @@ def main():
   config_parser = config.ProcmonConfigParser()
   procconf = config_parser.load_procmon_config(MAINPATH+'etc/procmon.xml')
   mrconf = config_parser.load_mrtask_config(MAINPATH+'etc/mrtask.xml')
-  print 'procconfig = ', procconf
   matchers = [matcher.SubtreeMatcher(procconf, host),
               matcher.MapReduceMatcher(mrconf, host),
               matcher.SumMatcher(host)]

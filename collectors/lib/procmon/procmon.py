@@ -132,7 +132,6 @@ class ProcMon:
         while (1):
             self.startGroup()
             self.monitor()
-            print 'procs list = self.procs ', self.procs
             for matcher in self.matchers:
                 matcher.endGroup()
             self.report()
