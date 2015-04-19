@@ -29,9 +29,9 @@ def main():
   config_parser = config.ProcmonConfigParser()
   procconf = config_parser.load_procmon_config(MAINPATH+'etc/procmon.xml')
   mrconf = config_parser.load_mrtask_config(MAINPATH+'etc/mrtask.xml')
-  matchers = [matcher.SubtreeMatcher(procconf, host),
-              matcher.MapReduceMatcher(mrconf, host),
-              matcher.SumMatcher(host)]
+  matchers = [matcher.SubtreeMatcher(procconf, host)]
+              #matcher.MapReduceMatcher(mrconf, host),
+              #matcher.SumMatcher(host)]
   for mat in matchers:
     procmonitor.register_matcher(mat)
   

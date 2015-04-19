@@ -135,8 +135,12 @@ class SubtreeMatcher:
 		Xmx = re.findall(r'Xmx\d+m', pinfo.cmd)[0]
 		report ['Xmx'] = re.findall(r'\d+',Xmx)[0]
 
-            if 'Yarn' in pinfo.cmd:
-		report['job_id'] = ''
+            if 'YarnChild' in pinfo.cmd:
+		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
+		report['task_id'] = re.findall(r'attempt_.*', pinfo.cmd)[0].replace(' ', '-')
+		#check if this is a container. Task jvms are never parent to anyone
+		if 'bash' in pinfo.cmd:
+		    report['is_container'] = True	
 	    
 	    #we still need cpu_user, cpu_system, vmsize, vmrss, read/write readrate writerate 
 	    for i in xrange(0, len(pinfo.modules)):

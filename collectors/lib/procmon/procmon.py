@@ -17,18 +17,22 @@ class ProcInfo:
         self.met = MetricList(modules, 0)
         self.getIDs()
 	self.rule = None
+	self.init_vmss = 0
 
     def getIDs(self):
         self.cmd = getCmdLine(self.pid)
         (self.ppid, self.uid) = getPPidAndUid(self.pid)
 
-    def update(self, nowtime):
+    def update(self, nowtime, new):
         interval = 10
         if nowtime - self.oldtime > interval * 2:
             self.getIDs()
         for i in range(0, len(self.modules)):
             self.modules[i].update(self.pid, \
                 self.met.getRow(i), nowtime-self.oldtime)
+	    if i == 1 and new:
+		self.init_vmms = int(self.met.getRow(i)[0])
+		print 'INIT VMMS = ', self.init_vmms
         self.oldtime = nowtime
 
     def prepare_tree(self):
@@ -96,13 +100,15 @@ class ProcMon:
 
     def update(self):
         self.active = []
+	new = False
         for f in os.listdir(PATH.PROC):
             if len(f) > 0 and f.isdigit():
                 pid = int(f)
                 self.active.append(pid) #append all pids to active[] list
                 if pid not in self.procs:
                     self.procs[pid] = ProcInfo(pid, self, self.modules)
-                self.procs[pid].update(int(time.time()))
+		    new = True
+                self.procs[pid].update(int(time.time()), new)
 
     def startGroup(self):
         for reporter in self.reporters:
@@ -137,7 +143,7 @@ class ProcMon:
             self.report()
             for reporter in self.reporters:
                 reporter.endGroup()
-            time.sleep(50)
+            time.sleep(5)
 
 if __name__ == "__main__":
     main()

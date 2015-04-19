@@ -5,15 +5,9 @@
   <processes>
 <!-- List all the processes to monitor -->
 <process>
-        <cmdline>.*org.apache.hadoop.hdfs.server.namenode.NameNode.*</cmdline>
-        <displayname>NameNode</displayname>
+        <cmdline>.*org.apache.hadoop.mapred.YarnChild.*</cmdline>
+        <displayname>YarnChild</displayname>
     </process>
-
-<process>
-        <cmdline>.*org.apache.hadoop.yarn.server.resourcemanager.ResourceManager.*</cmdline>
-        <displayname>ResourceManager</displayname>
-    </process>
-
 
   </processes>
   <hosts>
