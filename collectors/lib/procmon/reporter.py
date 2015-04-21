@@ -130,10 +130,15 @@ class StdoutReporter:
         print "%s %d %s %s"%(name, timestamp, str(val), tags)
 
     def report_agg(self, timestamp, reportlist):
-	for i in reportlist:
+	#for i in reportlist:
 	    #for each pinfo result
+	#    for key in i:
+	#	print key, i[key]
+	#print reportlist
+	for i in reportlist:
 	    for key in i:
-		print key, i[key]
+		print key + ':' + str(i[key]) + ',',
+	    print ''
     def endGroup(self):
         sys.stdout.flush()
 

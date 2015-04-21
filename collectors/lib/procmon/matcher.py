@@ -137,10 +137,14 @@ class SubtreeMatcher:
 
             if 'YarnChild' in pinfo.cmd:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
-		report['task_id'] = re.findall(r'attempt_.*', pinfo.cmd)[0].replace(' ', '-')
+		report['init_vmss'] = pinfo.init_vmss
 		#check if this is a container. Task jvms are never parent to anyone
 		if 'bash' in pinfo.cmd:
-		    report['is_container'] = True	
+		    report['container_id'] = 'container_' + report['job_id']
+		    report['task_id'] = ''
+		else:
+		    report['task_id'] = re.findall(r'attempt_.*', pinfo.cmd)[0].replace(' ', '-')
+		    report['container_id'] = ''	
 	    
 	    #we still need cpu_user, cpu_system, vmsize, vmrss, read/write readrate writerate 
 	    for i in xrange(0, len(pinfo.modules)):
