@@ -128,7 +128,7 @@ class SubtreeMatcher:
 	    report = {}
 	    report['pid'] = pinfo.pid
 	    report['ppid'] = pinfo.ppid
-	    report ['cmd'] = pinfo.cmd
+	    #report ['cmd'] = pinfo.cmd
 	    report['proc'] = pinfo.rule.get_displayname()
 	    #yarn specific
 	    if 'Xmx' in pinfo.cmd:
