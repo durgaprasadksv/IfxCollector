@@ -136,9 +136,7 @@ class StdoutReporter:
 	#	print key, i[key]
 	#print reportlist
 	for i in reportlist:
-	    for key in i:
-		print key + ':' + str(i[key]) + ',',
-	    print ''
+	    print i['job_id'], i['task_id'], i['container_id'], i['cpu_user'], i['vmrss'], i['vmsize'], i['Xmx'], i['proc']
     def endGroup(self):
         sys.stdout.flush()
 
