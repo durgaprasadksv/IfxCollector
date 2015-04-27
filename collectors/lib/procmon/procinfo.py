@@ -78,7 +78,7 @@ class ProcInfoIO:
         
     def naming(self):
         return ["readbytes", "writebytes", "canwritebytes", \
-                        "readbytesrate", "writebytesrate", "canwritebytesrate"]
+                        "readbytesrate", "writebytesrate", "cancelledwritebytesrate"]
 
     def update(self, pid, met, intv):
         try:
