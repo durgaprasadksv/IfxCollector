@@ -143,7 +143,7 @@ class SubtreeMatcher:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
 		else:
-		    report['task_id'] = re.findall(r'attempt_.*', pinfo.cmd)[0].replace(' ', '_')
+		    report['task_id'] = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ' '))[0].strip().replace(' ', '_')
 		    report['container_id'] = ''	
 	    
 	    for i in xrange(0, len(pinfo.modules)):
