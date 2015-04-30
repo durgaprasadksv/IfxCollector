@@ -17,7 +17,7 @@ def getPPidAndUid(pid):
         lines = f.readlines();
         f.close()
     except Exception, e:
-        sys.stderr.write(str(e))
+        #sys.stderr.write(str(e))
         return (None, None)
     ppid = 1
     uid = 0
@@ -57,7 +57,7 @@ class ProcInfoStat:
             line = f.readline()
             f.close()
         except Exception, e:
-            sys.stderr.write(str(e))
+            #sys.stderr.write(str(e))
             return
         items = line.split()
         i = 0
@@ -86,7 +86,7 @@ class ProcInfoIO:
             lines = f.readlines();
             f.close()
         except Exception, e:
-            sys.stderr.write(str(e))
+            #sys.stderr.write(str(e))
             return
         for i in range(3):
             newmet = float(lines[4+i].split()[1])
@@ -111,7 +111,7 @@ class ProcInfoStatus:
             lines = f.readlines();
             f.close()
         except Exception, e:
-            sys.stderr.write(str(e))
+            #sys.stderr.write(str(e))
             return
         met[0] = 0
         met[1] = 0
