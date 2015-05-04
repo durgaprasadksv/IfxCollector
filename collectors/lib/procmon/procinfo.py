@@ -1,3 +1,4 @@
+import re
 import sys
 from constant import *
 
@@ -121,3 +122,26 @@ class ProcInfoStatus:
                 met[0] = long(items[1])/1024
             if items[0].startswith("VmRSS"):
                 met[1] = long(items[1])/1024
+class ProcNetStatus:
+    SIZE = 2
+    def size(self):
+	return ProcNetStatus.SIZE 
+    def naming(self):
+	return ["bytes_rx", "bytes_tx"]
+    def update(self, pid, met, intv):
+	try:
+	    f = open(PATH.PROCPID_NETIO%(pid), 'r')
+	    lines = f.readlines()
+	    f.close()
+     	except Exception, e:
+	    return
+	met[0] = 0
+	met[1] = 0
+	bytes_tx = 0
+        bytes_rx = 0
+        for i in range(2):
+	    nums = re.findall('\d\d+', lines[2+i])
+	    bytes_rx += long(nums[0]) 
+	    bytes_tx += long(nums[2])
+	met[0] = bytes_rx
+	met[1] = bytes_tx

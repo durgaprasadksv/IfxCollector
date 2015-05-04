@@ -4,3 +4,4 @@ class PATH:
     PROCPID_STAT='/proc/%d/stat'
     PROCPID_IO='/proc/%d/io'
     PROC='/proc/'
+    PROCPID_NETIO='/proc/%d/net/dev'

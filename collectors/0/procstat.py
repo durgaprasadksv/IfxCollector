@@ -14,7 +14,7 @@ from procmon import config
 def main():
   procmonitor = procmon.ProcMon()
   modules = [procinfo.ProcInfoStat(), procinfo.ProcInfoStatus(),
-             procinfo.ProcInfoIO()]
+             procinfo.ProcInfoIO(), procinfo.ProcNetStatus()]
   for mod in modules:
     procmonitor.register_module(mod)
   reporters = [reporter.StdoutReporter()]
