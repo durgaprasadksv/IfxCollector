@@ -139,6 +139,7 @@ class StdoutReporter:
 	    if i['container_id'] != '':
 	    	continue
 	    output = '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s'% (i['job_id'], i['task_id'], i['container_id'], str(i['cpu_user']), str(i['vmrss']), str(i['ivmss']), str(i['vmsize']), str(i['Xmx']), i['proc'], str(int(i['readbytes'])/1024), str(int(i['writebytes'])/1024), str(int(i['bytes_rx'])), str(int(i['bytes_tx'])))
+	    print output
     def endGroup(self):
         sys.stdout.flush()
 
