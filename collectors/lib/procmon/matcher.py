@@ -7,6 +7,7 @@ from metriclist import *
 from procinfo import *
 from procmon import *
 from reporter import *
+import requests
 
 def safe_get(dictionary, key):
     if key in dictionary:
@@ -139,6 +140,8 @@ class SubtreeMatcher:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
 		report['ivmss'] = pinfo.ivm
 		#check if this is a container. Task jvms are never parent to anyone
+		app_id = report['job_id'].replace('job', 'application')
+	        app_stats = appmanager_find(report['job_id'], app_id)
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
@@ -155,6 +158,11 @@ class SubtreeMatcher:
 	    metrics.append(report)
 	reporter.report_agg(time, metrics)
 	self.proc_results = []
+
+    def appmanager_find(app_id, job_id):
+	resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/counters')
+	print resp
+	
     def endGroup(self):
         pass
 
