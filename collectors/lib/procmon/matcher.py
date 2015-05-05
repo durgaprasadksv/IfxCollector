@@ -180,6 +180,7 @@ class SubtreeMatcher:
 		    # get the REDUCE_INPUT_RECORDS
 		    reduce_resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks/'+ task_id + '/counters')
 		    reduce_resp = json.loads(reduce_resp.text)
+		    print reduce_resp
 		    reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
 		    print reduce_rec
 		 
