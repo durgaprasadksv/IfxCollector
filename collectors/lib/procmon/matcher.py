@@ -1,3 +1,4 @@
+import json
 import re
 #import json
 import socket
@@ -141,8 +142,14 @@ class SubtreeMatcher:
 		report['ivmss'] = pinfo.ivm
 		#check if this is a container. Task jvms are never parent to anyone
 		app_id = report['job_id'].replace('job', 'application')
-		resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/counters')
-		print resp
+		job_id = report['job_id']
+		#reduce progress, map progress, elasped time http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs
+		# esimated completion time = map_progress/elasped_time*(100-map_progress) + red_prgress/elasped_time*(100 - reducer_progress)
+		# http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs/job_1326232085508_4_4/tasks/task_1326232085508_4_4_r_0/counters
+		
+		resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
+		job_json = json.loads(resp.text)
+		print job_json
 
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
