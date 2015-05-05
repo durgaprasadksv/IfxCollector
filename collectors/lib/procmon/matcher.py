@@ -121,6 +121,9 @@ class SubtreeMatcher:
                     #self.results[i].add(self.getMetric(pinfo))
 		     pinfo.rule = rule #the rule that matched this pinfo
 		     self.proc_results.append(pinfo)
+    def appmanager_find(app_id, job_id):
+	resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/counters')
+	print resp
 
     def report(self, timestamp, reporter):
 	#-Xmx768m
@@ -158,10 +161,6 @@ class SubtreeMatcher:
 	    metrics.append(report)
 	reporter.report_agg(time, metrics)
 	self.proc_results = []
-
-    def appmanager_find(app_id, job_id):
-	resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/counters')
-	print resp
 	
     def endGroup(self):
         pass
