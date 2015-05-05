@@ -147,7 +147,7 @@ class SubtreeMatcher:
 		# esimated completion time = map_progress/elasped_time*(100-map_progress) + red_prgress/elasped_time*(100 - reducer_progress)
 		# http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs/job_1326232085508_4_4/tasks/task_1326232085508_4_4_r_0/counters
 		
-		resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
+		resp = requests.get('ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
 		map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
 		el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
@@ -159,7 +159,7 @@ class SubtreeMatcher:
 		if red_p/el_time > 0.0:
 		    ect_r = ((100 - red_p)/(map_p/el_time))
 		ect = ect_m + ect_r 
-		print ect_m, ect_r, map_p, red_p, el_time, map_p/el_time, red_p/el_time,  (ect/1000)/60, 'minutes'
+		report['ect'] = (ect/1000)/60
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
