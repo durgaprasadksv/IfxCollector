@@ -147,7 +147,7 @@ class SubtreeMatcher:
 		# esimated completion time = map_progress/elasped_time*(100-map_progress) + red_prgress/elasped_time*(100 - reducer_progress)
 		# http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs/job_1326232085508_4_4/tasks/task_1326232085508_4_4_r_0/counters
 		
-		resp = requests.get('ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
+		resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
 		map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
 		el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
@@ -166,7 +166,15 @@ class SubtreeMatcher:
 		else:
 		    report['task_id'] = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ' '))[0].strip().replace(' ', '_')
 		    report['container_id'] = ''	
-	    
+	   
+		tasks_running = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks')
+		tasks_json = json.loads(tasks_running.text)
+		tasks_list = tasks_json['tasks']['task']
+		for task in task_list:
+		    if task['type'] == 'REDUCE'
+			print task
+		
+		 
 	    for i in xrange(0, len(pinfo.modules)):
 		module = pinfo.modules[i]
 		for k in xrange(0, module.size()):
@@ -174,7 +182,7 @@ class SubtreeMatcher:
 		    #value is in pinfo
 		    report[module.naming()[k]] = pinfo.met.get(i,k)
 	    metrics.append(report)
-	#reporter.report_agg(time, metrics)
+	reporter.report_agg(time, metrics)
 	self.proc_results = []
 	
     def endGroup(self):
