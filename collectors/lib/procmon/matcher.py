@@ -151,11 +151,15 @@ class SubtreeMatcher:
 		job_json = json.loads(resp.text)
 		map_p, red_p = int(job_json['jobs']['job'][0]['mapProgress']), int(job_json['jobs']['job'][0]['reduceProgress'])
 		el_time = int(job_json['jobs']['job'][0]['elapsedTime'])
-		ect = ((100 - map_p)/(map_p/el_time)) + ((100 - red_p)/(map_p/el_time))
-		ect = (ect/1000)/60
-		print map_p, red_p, el_time, ect
 
-		print ect
+		ect_m = 0
+		ect_r = 0
+		if map_p/el_time > 0:
+		    ect_m = ((100 - map_p)/(map_p/el_time))
+		if red_p/el_time > 0:
+		    ect_r = ((100 - red_p)/(map_p/el_time))
+		ect = ect_m + ect_r 
+		print (ect/1000)/60, 'minutes'
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
