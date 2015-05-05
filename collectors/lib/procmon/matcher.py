@@ -171,7 +171,7 @@ class SubtreeMatcher:
 		tasks_json = json.loads(tasks_running.text)
 		tasks_list = tasks_json['tasks']['task']
 		for task in task_list:
-		    if task['type'] == 'REDUCE'
+		    if task['type'] == 'REDUCE':
 			print task
 		
 		 
