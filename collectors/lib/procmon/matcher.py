@@ -149,8 +149,12 @@ class SubtreeMatcher:
 		
 		resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
-		print job_json['jobs']['job']['mapProgress'], job_json['jobs']['job']['reduceProgress']
-
+		map_p, red_p = int(job_json['jobs']['job'][0]['mapProgress']), int(job_json['jobs']['job'][0]['reduceProgress'])
+		el_time = int(job_json['jobs']['job'][0]['elapsedTime'])
+		ect = (map_p/el_time) * (100 - map_p) + (red_p/el_time) * (100 - red_p)
+		ect = ect/60
+		
+		print ect
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
