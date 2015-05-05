@@ -1,10 +1,5 @@
 import os
 from datetime import datetime
-# scan the log directory
-# create a map for every log container, mark lines it has scanned and if it is done
-# check if it is done, if so, skip this log file
-# if not, go to the current lines
-# report the amount of shuffle data
 
 log_stat_dic = {}
 
@@ -22,8 +17,6 @@ def scan_syslog_dir(userlog_root):
 #	line:	the text
 # 	return:	True if this line has the shuffle stat data
 # 	return:	False not
-# 2015-05-05 18:45:37,799 INFO [fetcher#3] org.apache.hadoop.mapreduce.task.reduce.Fetcher: 
-# fetcher#3 about to shuffle output of map attempt_1430849739195_0002_m_000106_0 decomp: 19634 len: 6230 to MEMORY
 def is_shuffle_stat(line):
 	if ("org.apache.hadoop.mapreduce.task.reduce.Fetcher:" in line) and ("about to shuffle output of map" in line):
 		return True
@@ -51,6 +44,11 @@ def get_ID(path):
 	token = token[-2].split("_")
 	return int(token[2]), int(token[4]) 
 
+# scan the log directory
+# create a map for every log container, mark lines it has scanned and if it is done
+# check if it is done, if so, skip this log file
+# if not, go to the current lines
+# report the amount of shuffle data
 def shuffle():
 	syslog_path_list = scan_syslog_dir("/mnt/var/log/hadoop/userlogs")
 	for syslog in syslog_path_list:
