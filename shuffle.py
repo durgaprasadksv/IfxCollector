@@ -1,10 +1,5 @@
 import os
 from datetime import datetime
-# scan the log directory
-# create a map for every log container, mark lines it has scanned and if it is done
-# check if it is done, if so, skip this log file
-# if not, go to the current lines
-# report the amount of shuffle data
 
 log_stat_dic = {}
 
@@ -22,8 +17,6 @@ def scan_syslog_dir(userlog_root):
 #	line:	the text
 # 	return:	True if this line has the shuffle stat data
 # 	return:	False not
-# 2015-05-05 18:45:37,799 INFO [fetcher#3] org.apache.hadoop.mapreduce.task.reduce.Fetcher: 
-# fetcher#3 about to shuffle output of map attempt_1430849739195_0002_m_000106_0 decomp: 19634 len: 6230 to MEMORY
 def is_shuffle_stat(line):
 	if ("org.apache.hadoop.mapreduce.task.reduce.Fetcher:" in line) and ("about to shuffle output of map" in line):
 		return True
@@ -34,10 +27,10 @@ def is_shuffle_stat(line):
 def get_shuffle_stat(line):
 	token = line.split(" ")
 	token_num = len(token)
-	timestamp = datetime.strptime("2015-05-05 18:45:37,799", "%Y-%m-%d %H:%M:%S,%f")
+	timestamp = datetime.strptime(token[0] + " " + token[1], "%Y-%m-%d %H:%M:%S,%f")
 	size = token[token_num - 5]
 	map_ID = token[token_num - 7].split("_")[-2]
-	return timestamp, size, map_ID
+	return timestamp, size, int(map_ID)
 
 
 def is_reducer_finshed(line):
@@ -45,10 +38,21 @@ def is_reducer_finshed(line):
 		return True
 	return False
 
+# return job ID and task ID
+def get_ID(path):
+	token = path.split("/")
+	token = token[-2].split("_")
+	return int(token[2]), int(token[4]) 
+
+# scan the log directory
+# create a map for every log container, mark lines it has scanned and if it is done
+# check if it is done, if so, skip this log file
+# if not, go to the current lines
+# report the amount of shuffle data
 def shuffle():
 	syslog_path_list = scan_syslog_dir("/mnt/var/log/hadoop/userlogs")
 	for syslog in syslog_path_list:
-		if syslog not in syslog_path_list:
+		if syslog not in log_stat_dic:
 			stat_list = []
 			# is it finished
 			stat_list.append(False)
@@ -60,6 +64,7 @@ def shuffle():
 		if finshed == True:
 			break
 
+		job_ID, task_ID = get_ID(syslog)
 		start_line = log_stat_dic[syslog][1]
 		log_file = open(syslog)
 		lines = log_file.readlines()
@@ -73,11 +78,12 @@ def shuffle():
 			else:
 				if is_shuffle_stat(line) == True:
 					timestamp, size, map_ID = get_shuffle_stat(line);
-					print timestamp, " ", size, " ", map_ID
+					print timestamp, "job ", job_ID, " Reducer ", task_ID , \
+						" data size " , size, " from Mapper", map_ID
 		log_stat_dic[syslog][1] = len(lines)
 
 
-shuffle()
+# shuffle()
 # "http://54.175.58.152:8086", "root", "1234567"
 # ip
 # port
@@ -89,11 +95,6 @@ shuffle()
 
 # /mnt/var/log/hadoop/userlogs
 
-# line = "2015-05-05 18:45:37,799 INFO [fetcher#3] org.apache.hadoop.mapreduce.task.reduce.Fetcher: fetcher#3 about to shuffle output of map attempt_1430849739195_0002_m_000106_0 decomp: 19634 len: 6230 to MEMORY"
-# timestamp, size, map_ID = get_shuffle_stat(line);
-# print timestamp
-# print size
-# print map_ID
 
 # strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
 # 'Thu, 28 Jun 2001 14:17:15 +0000'
