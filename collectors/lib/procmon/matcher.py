@@ -151,8 +151,8 @@ class SubtreeMatcher:
 		job_json = json.loads(resp.text)
 		map_p, red_p = int(job_json['jobs']['job'][0]['mapProgress']), int(job_json['jobs']['job'][0]['reduceProgress'])
 		el_time = int(job_json['jobs']['job'][0]['elapsedTime'])
-		ect = ((map_p/(100 - map_p))*el_time) + ((red_p/(100 - red_p))*el_time)
-		ect = ect/60
+		ect = ((100 - map_p)/(map_p/el_time)) + ((100 - red_p)/(map_p/el_time))
+		ect = (ect/1000)/60
 		print map_p, red_p, el_time, ect
 
 		print ect
