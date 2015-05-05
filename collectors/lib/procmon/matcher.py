@@ -173,9 +173,11 @@ class SubtreeMatcher:
 		for task in tasks_list:
 		    if task['type'] == 'REDUCE':
 			print task['id']
-		# attempt_1430862599618_0007_r_000000_0_17 
-	        task_id = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ' '))[0].strip().split(' ')[0].strip()
+		# attempt_1430862599618_0007_r_000000_0_17
+		# task_1430862599618_0011_r_000000 task_1430862599618_0011_r_000000_0 
+	        task_id = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ''))[0].strip().split(' ')[0].strip()
 		task_id = task_id.replace('attempt', 'task')
+		print task_id
 		if '_r_' in pinfo.cmd:
 		    #its a reducer. Change it to above in future
 		    # get the REDUCE_INPUT_RECORDS
