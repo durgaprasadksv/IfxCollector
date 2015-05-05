@@ -149,7 +149,7 @@ class SubtreeMatcher:
 		
 		resp = requests.get('http://ec2-52-5-7-223.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
-		print job_json
+		print job_json['jobs']['job']['mapProgress'], job_json['jobs']['job']['reduceProgress']
 
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
