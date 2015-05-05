@@ -153,7 +153,8 @@ class SubtreeMatcher:
 		el_time = int(job_json['jobs']['job'][0]['elapsedTime'])
 		ect = (map_p/el_time) * (100 - map_p) + (red_p/el_time) * (100 - red_p)
 		ect = ect/60
-		
+		print map_p, red_p, ect
+
 		print ect
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
