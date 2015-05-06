@@ -186,7 +186,7 @@ class SubtreeMatcher:
 		    try:
 		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
 			report['reduced_rec'] = reduce_rec[5]
-			print report
+			print reduce_rec[5]
 		    except:
 			pass
 	    for i in xrange(0, len(pinfo.modules)):
