@@ -161,7 +161,7 @@ class SubtreeMatcher:
 		report['task_id'] = ''
 		report['map_p'] = map_p
 		report['red_p'] = red_p
-
+		
             if 'YarnChild' in pinfo.cmd:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
 		report['ivmss'] = pinfo.ivm
