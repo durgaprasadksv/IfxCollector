@@ -142,6 +142,9 @@ class SubtreeMatcher:
 		app_id = app_id.strip()
 		resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
+		map_p = 0.0
+                red_p = 0.0
+		el_time =0
 		try:
 		    map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
 		    el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
@@ -171,12 +174,13 @@ class SubtreeMatcher:
 		#reduce progress, map progress, elasped time http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs
 		# esimated completion time = map_progress/elasped_time*(100-map_progress) + red_prgress/elasped_time*(100 - reducer_progress)
 		# http://<proxy http address:port>/proxy/application_1326232085508_0004/ws/v1/mapreduce/jobs/job_1326232085508_4_4/tasks/task_1326232085508_4_4_r_0/counters
-		
-		resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
-		job_json = json.loads(resp.text)
-		map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
-		el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
-
+		try:
+		    resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
+		    job_json = json.loads(resp.text)
+		    map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
+		    el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
+		except:
+		    pass
 		ect_m = 0.0
 		ect_r = 0.0
 		if map_p/el_time > 0.0:
