@@ -154,7 +154,7 @@ class SubtreeMatcher:
                 if red_p/el_time > 0.0:
                     ect_r = ((100 - red_p)/(map_p/el_time))
                 ect = ect_m + ect_r
-                report['ect'] = (ect/1000)/60
+                report['ect'] = (ect/1000)
 		report['container_id']=''
 		report['job_id']=''
 		report['ivmss'] = 0
