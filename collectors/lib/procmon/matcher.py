@@ -170,7 +170,9 @@ class SubtreeMatcher:
 		tasks_running = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks')
 		tasks_json = json.loads(tasks_running.text)
 		tasks_list = tasks_json['tasks']['task']
-		#for task in tasks_list:
+		for task in tasks_list:
+		    if 'FAIL' in task['state']:
+			print 'FAILED', task
 		#    if task['type'] == 'REDUCE':
 	       	#	print task['id']
 		# attempt_1430862599618_0007_r_000000_0_17

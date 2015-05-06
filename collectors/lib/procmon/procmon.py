@@ -144,7 +144,7 @@ class ProcMon:
             self.report()
             for reporter in self.reporters:
                 reporter.endGroup()
-            time.sleep(2)
+            time.sleep(1)
 
 if __name__ == "__main__":
     main()
