@@ -184,7 +184,7 @@ class SubtreeMatcher:
 		    reduce_resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks/'+ task_id + '/counters')
 		    reduce_resp = json.loads(reduce_resp.text)
 		    try:
-		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
+		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]['counter'][5]
 			print reduce_rec
 		    except:
 			pass
