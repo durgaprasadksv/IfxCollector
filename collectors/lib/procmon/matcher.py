@@ -136,6 +136,22 @@ class SubtreeMatcher:
 	    if 'Xmx' in pinfo.cmd:
 		Xmx = re.findall(r'Xmx\d+m', pinfo.cmd)[0]
 		report ['Xmx'] = re.findall(r'\d+',Xmx)[0]
+            report['ect'] = 0
+	    if 'MRAppMaster' in pinfo.cmd:
+		app_id = re.findall(r'application_\d+_\d+', pinfo.cmd)[0]
+		app_id = app_id.strip()
+		resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
+		job_json = json.loads(resp.text)
+		map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
+		el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
+		ect_m = 0.0
+                ect_r = 0.0
+                if map_p/el_time > 0.0:
+                    ect_m = ((100 - map_p)/(map_p/el_time))
+                if red_p/el_time > 0.0:
+                    ect_r = ((100 - red_p)/(map_p/el_time))
+                ect = ect_m + ect_r
+                report['ect'] = (ect/1000)/60
 
             if 'YarnChild' in pinfo.cmd:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
@@ -159,7 +175,7 @@ class SubtreeMatcher:
 		if red_p/el_time > 0.0:
 		    ect_r = ((100 - red_p)/(map_p/el_time))
 		ect = ect_m + ect_r 
-		report['ect'] = (ect/1000)/60
+		#report['ect'] = (ect/1000)/60
 		report['map_p'] = map_p
 		report['red_p'] = red_p
 		if 'bash' in pinfo.cmd:

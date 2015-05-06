@@ -138,7 +138,7 @@ class StdoutReporter:
 	for i in reportlist:
 	    if i['container_id'] != '':
 	    	continue
-	    output = '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s'% (i['job_id'], i['task_id'], i['container_id'], str(i['cpu_user']), str(i['vmrss']), str(i['ivmss']), str(i['vmsize']), str(i['Xmx']), i['proc'], str(int(i['readbytes'])/1024), str(int(i['writebytes'])/1024), str(float(i['map_p'])), str(float(i['red_p'])), str(int(i['reduce_shuffle_bytes'])), str(int(i['reduce_rec'])))
+	    output = '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s'% (i['job_id'], i['task_id'], i['container_id'], str(i['cpu_user']), str(i['vmrss']), str(i['ivmss']), str(i['vmsize']), str(i['Xmx']), i['proc'], str(int(i['readbytes'])/1024), str(int(i['writebytes'])/1024), str(float(i['map_p'])), str(float(i['red_p'])), str(int(i['reduce_shuffle_bytes'])), str(int(i['reduce_rec'])), str(int(i['ect'])))
 	    print output
     def endGroup(self):
         sys.stdout.flush()
