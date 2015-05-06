@@ -160,6 +160,8 @@ class SubtreeMatcher:
 		    ect_r = ((100 - red_p)/(map_p/el_time))
 		ect = ect_m + ect_r 
 		report['ect'] = (ect/1000)/60
+		report['map_p'] = map_p
+		report['red_p'] = red_p
 		if 'bash' in pinfo.cmd:
 		    report['container_id'] = 'container_' + report['job_id']
 		    report['task_id'] = ''
