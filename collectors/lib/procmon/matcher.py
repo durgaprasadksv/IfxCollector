@@ -167,15 +167,27 @@ class SubtreeMatcher:
 		    report['task_id'] = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ' '))[0].strip().replace(' ', '_')
 		    report['container_id'] = ''	
 	   
-		#tasks_running = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks')
-		#tasks_json = json.loads(tasks_running.text)
-		#tasks_list = tasks_json['tasks']['task']
+		tasks_running = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks')
+		tasks_json = json.loads(tasks_running.text)
+		tasks_list = tasks_json['tasks']['task']
 		#for task in tasks_list:
 		#    if task['type'] == 'REDUCE':
-		#	print task
-		
-		
-		 
+	       	#	print task['id']
+		# attempt_1430862599618_0007_r_000000_0_17
+		# task_1430862599618_0011_r_000000 task_1430862599618_0011_r_000000_0 
+	        task_id = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ''))[0].strip().split(' ')[0].strip()
+		task_id = task_id.replace('attempt', 'task')
+		task_id = re.sub(r'_\d+$','', task_id)
+		if '_r_' in pinfo.cmd:
+		    #its a reducer. Change it to above in future
+		    # get the REDUCE_INPUT_RECORDS
+		    reduce_resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks/'+ task_id + '/counters')
+		    reduce_resp = json.loads(reduce_resp.text)
+		    try:
+		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]['counter']
+			print reduce_rec
+		    except:
+			pass
 	    for i in xrange(0, len(pinfo.modules)):
 		module = pinfo.modules[i]
 		for k in xrange(0, module.size()):
