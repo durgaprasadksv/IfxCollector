@@ -142,8 +142,11 @@ class SubtreeMatcher:
 		app_id = app_id.strip()
 		resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/')
 		job_json = json.loads(resp.text)
-		map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
-		el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
+		try:
+		    map_p, red_p = float(job_json['jobs']['job'][0]['mapProgress']), float(job_json['jobs']['job'][0]['reduceProgress'])
+		    el_time = float(job_json['jobs']['job'][0]['elapsedTime'])
+		except:
+		    pass
 		ect_m = 0.0
                 ect_r = 0.0
                 if map_p/el_time > 0.0:
@@ -156,6 +159,8 @@ class SubtreeMatcher:
 		report['job_id']=''
 		report['ivmss'] = 0
 		report['task_id'] = ''
+		report['map_p'] = map_p
+		report['red_p'] = red_p
 
             if 'YarnChild' in pinfo.cmd:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
