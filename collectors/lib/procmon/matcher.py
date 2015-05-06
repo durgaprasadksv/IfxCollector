@@ -185,8 +185,7 @@ class SubtreeMatcher:
 		    reduce_resp = json.loads(reduce_resp.text)
 		    try:
 		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
-			report['reduced_rec'] = reduce_rec[5]
-			print reduce_rec[5]
+			print reduce_rec
 		    except:
 			pass
 	    for i in xrange(0, len(pinfo.modules)):
