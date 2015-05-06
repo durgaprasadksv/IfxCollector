@@ -182,10 +182,13 @@ class SubtreeMatcher:
 		    #its a reducer. Change it to above in future
 		    # get the REDUCE_INPUT_RECORDS
 		    reduce_resp = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks/'+ task_id + '/counters')
-		    print reduce_resp.text
-		    #reduce_resp = json.loads(reduce_resp.text)
-		    #reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
-		 
+		    reduce_resp = json.loads(reduce_resp.text)
+		    try:
+		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]
+			report['reduced_rec'] = reduce_rec[5]
+			print report
+		    except:
+			pass
 	    for i in xrange(0, len(pinfo.modules)):
 		module = pinfo.modules[i]
 		for k in xrange(0, module.size()):
