@@ -172,9 +172,9 @@ class SubtreeMatcher:
 		tasks_running = requests.get('http://ec2-52-6-247-127.compute-1.amazonaws.com:3424/proxy/' + app_id + '/ws/v1/mapreduce/jobs/' + job_id + '/tasks')
 		tasks_json = json.loads(tasks_running.text)
 		tasks_list = tasks_json['tasks']['task']
-		for task in tasks_list:
-		    if 'FAIL' in task['state']:
-			print 'FAILED', task
+		#for task in tasks_list:
+		#    if 'FAIL' in task['state']:
+		#	print 'FAILED', task
 		#    if task['type'] == 'REDUCE':
 	       	#	print task['id']
 		# attempt_1430862599618_0007_r_000000_0_17
@@ -182,6 +182,8 @@ class SubtreeMatcher:
 	        task_id = re.findall('attempt_.*', pinfo.cmd.replace('\x00', ''))[0].strip().split(' ')[0].strip()
 		task_id = task_id.replace('attempt', 'task')
 		task_id = re.sub(r'_\d+$','', task_id)
+		report['reduce_shuffle_bytes'] = 0
+		report['reduce_rec'] = 0
 		if '_r_' in pinfo.cmd:
 		    #its a reducer. Change it to above in future
 		    # get the REDUCE_INPUT_RECORDS
@@ -191,6 +193,9 @@ class SubtreeMatcher:
 		    	reduce_rec = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]['counter'][3]['value']
 			reduce_rec = int(reduce_rec)
 			report['reduce_bytes'] = reduce_rec
+			
+			reduce_r = reduce_resp['jobTaskCounters']['taskCounterGroup'][1]['counter'][4]['value']
+			report['reduce_rec'] = int(reduce_r)	
 		    except:
 			pass
 	    for i in xrange(0, len(pinfo.modules)):
