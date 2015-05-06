@@ -152,6 +152,10 @@ class SubtreeMatcher:
                     ect_r = ((100 - red_p)/(map_p/el_time))
                 ect = ect_m + ect_r
                 report['ect'] = (ect/1000)/60
+		report['container_id']=''
+		report['job_id']=''
+		report['ivmss'] = 0
+		report['task_id'] = ''
 
             if 'YarnChild' in pinfo.cmd:
 		report['job_id'] = re.findall(r'container_\d+_\d+', pinfo.cmd)[0].replace('container', 'job')
